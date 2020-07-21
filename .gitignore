@@ -2,3 +2,4 @@ build
 .cxx
 .vs
 .vscode
+cmake-build-debug
