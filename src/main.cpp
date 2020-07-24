@@ -1,6 +1,7 @@
 ﻿#include <thread>
 #include <iostream>
 #include "student.h"
+#include "thread_pool.hpp"
 /*
 1、若传递int这种简单的类型，建议都是值传递，不要使用引用
 2、如果传递类对象，避免隐式类型转换，应该全部在创建线程时，构造出临时对象，然后在函数参数中用引用来接收，否则系统还会构建临时对象，浪费，即构造三个对象。
@@ -46,11 +47,26 @@ void test_shared_ptr2() {
 
 }
 
-int main(int argc, char const *argv[]) {
+void fun1(int slp) {
+    printf("  hello, fun1 !  %d\n", std::this_thread::get_id());
+    if (slp > 0) {
+        printf(" ======= fun1 sleep %d  =========  %d\n", slp, std::this_thread::get_id());
+        std::this_thread::sleep_for(std::chrono::milliseconds(slp));
+    }
+}
 
+
+// 线程池
+void test_thread_pool() {
+    com::zw::ThreadPoolExecutor executor(10, 10, 10);
+    std::future<void> ff = executor.commit(fun1, 100);
+
+}
+
+int main(int argc, char const *argv[]) {
     std::cout << "input any key ...." << std::endl;
-//    test_shared_ptr();
-    test_shared_ptr1();
-    getchar();
+
+    test_thread_pool();
+    std::cin >> argc;
     return 0;
 }
