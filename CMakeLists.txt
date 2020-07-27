@@ -2,7 +2,6 @@
 
 add_definitions(-std=c++11)
 
-
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 
 aux_source_directory(${CMAKE_CURRENT_LIST_DIR}/include SRC_DIR)
