@@ -44,7 +44,6 @@ void test_shared_ptr1() {
 }
 
 void test_shared_ptr2() {
-
 }
 
 void fun1(int slp) {
@@ -55,18 +54,26 @@ void fun1(int slp) {
     }
 }
 
-
 // 线程池
 void test_thread_pool() {
     com::zw::ThreadPoolExecutor executor(10, 10, 10);
     std::future<void> ff = executor.commit(fun1, 100);
 
+    std::thread th([] {
+
+    });
+}
+
+void test_rv(int &&i) {
+    std::cout << i << std::endl;
 }
 
 int main(int argc, char const *argv[]) {
     std::cout << "input any key ...." << std::endl;
 
-    test_thread_pool();
-    std::cin >> argc;
+    // test_thread_pool();
+    test_rv(110);
+
+    std::cin.get();
     return 0;
 }

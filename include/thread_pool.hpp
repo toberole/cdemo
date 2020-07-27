@@ -14,7 +14,8 @@ namespace com {
         private:
             using Task = std::function<void()>;
 
-            std::vector<std::thread> pool;
+            std::vector<std::thread> thread_pool;
+
             std::queue<Task> tasks;
 
             std::mutex mtx;
@@ -22,10 +23,11 @@ namespace com {
 
             std::atomic<bool> stoped;
 
-            std::atomic<int> corePoolSize = 1;
-            std::atomic<int> maximumPoolSize = 1;
+            std::atomic_int corePoolSize;
+            std::atomic_int maximumPoolSize;
+            std::atomic_int idleThreadNum;
             long keepAliveTime = 0;
-            std::atomic<int> idleThreadNum = 0;
+
         public:
             inline ThreadPoolExecutor(int corePoolSize,
                                       int maximumPoolSize,
@@ -36,7 +38,7 @@ namespace com {
                 this->idleThreadNum = corePoolSize;
 
                 for (int i = 0; i < corePoolSize; ++i) {
-                    pool.emplace_back(
+                    thread_pool.emplace_back(
                             [this] {
                                 std::function<void()> task;
                                 while (!this->stoped) {
@@ -44,10 +46,9 @@ namespace com {
                                     this->cond.wait(
                                             lock, [this] {
                                                 return this->stoped.load() || !this->tasks.empty();
-                                            }
-                                    );
+                                            });
 
-                                    if (this->stoped && this->tasks.empty()) break;
+                                    if (this->stoped && this->tasks.empty())break;
 
                                     task = std::move(this->tasks.front());
                                     this->tasks.pop();
@@ -55,26 +56,25 @@ namespace com {
                                     task();
                                     idleThreadNum++;
                                 }
-                            }
-                    );
+                            });
                 }
             }
 
             inline ~ThreadPoolExecutor() {
                 stoped.store(true);
                 cond.notify_all();
-                for (auto th:pool) {
+                // 注意此处std::thread &th 引用的写法
+                // 否则 error: calling a private constructor of class 'std::__1::thread'
+                for (std::thread &th : thread_pool) {
                     if (th.joinable()) {
                         th.join();
                     }
                 }
             }
 
-            // 提交一个任务
-            // 调用.get()获取返回值会等待任务执行完,获取返回值
             // 有两种方法可以实现调用类成员，
-            // 一种是使用   bind： .commit(std::bind(&Dog::sayHello, &dog));
-            // 一种是用 mem_fn： .commit(std::mem_fn(&Dog::sayHello), &dog)
+            // 一种是使用 bind: .commit(std::bind(&Dog::sayHello, &dog));
+            // 一种是用 mem_fn: .commit(std::mem_fn(&Dog::sayHello), &dog)
             template<class F, class... Args>
             auto commit(F &&f, Args &&... args) -> std::future<decltype(f(args...))> {
                 if (stoped.load()) {
@@ -100,5 +100,5 @@ namespace com {
                 }
             }
         };
-    }
-}
+    } // namespace zw
+} // namespace com
