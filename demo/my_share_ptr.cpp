@@ -11,14 +11,12 @@ public:
     {
         ptr = nullptr;
         use_count = nullptr;
-        std::cout << "Created" << std::endl;
     }
 
     Shared_ptr(T *p)
     {
         ptr = p;
         use_count = new int(1);
-        std::cout << "Created" << std::endl;
     }
 
     Shared_ptr(const Shared_ptr<T> &other)
@@ -26,19 +24,21 @@ public:
         ptr = other.ptr;
         ++(*other.use_count);
         use_count = other.use_count;
-        std::cout << "Created" << std::endl;
     }
 
     Shared_ptr<T> &operator=(const Shared_ptr &other)
     {
         if (this == &other)
             return *this;
+
         (*other.use_count)++;
-        if (ptr && --(*use_count) == 0)
+
+        if (ptr && --(*use_count) == 0 /* 当前智能指针重新赋值 */)
         {
             delete ptr;
             delete use_count;
         }
+
         ptr = other.ptr;
         use_count = other.use_count;
         return *this;
@@ -72,8 +72,6 @@ public:
 
             delete use_count;
             use_count = nullptr;
-
-            std::cout << "Destroy" << std::endl;
         }
     }
 };
