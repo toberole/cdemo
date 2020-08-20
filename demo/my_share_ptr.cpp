@@ -56,6 +56,20 @@ public:
         return ptr;
     }
 
+    void reset()
+    {
+        if (ptr)
+        {
+            ptr = nullptr;
+        }
+
+        if (--(*use_count) <= 0)
+        {
+            delete use_count;
+            delete ptr;
+        }
+    }
+
     int get_use_count()
     {
         if (use_count == nullptr)
