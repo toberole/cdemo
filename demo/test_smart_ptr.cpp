@@ -56,7 +56,7 @@ int main(int argc, char const *argv[])
 
     // unique_ptr
     std::unique_ptr<A> a3(new A());
-    // error
+    // error 不支持赋值运算符
     // std::unique_ptr<A> a4 = a3;
     // a3 所有权转移到 a4,后续不建议再使用a3
     std::unique_ptr<A> a4 = std::move(a3);
