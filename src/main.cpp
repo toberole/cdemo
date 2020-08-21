@@ -8,10 +8,12 @@
     1、若传递int这种简单的类型，建议都是值传递，不要使用引用
     2、如果传递类对象，避免隐式类型转换，应该全部在创建线程时，构造出临时对象，然后在函数参数中用引用来接收，否则系统还会构建临时对象，浪费，即构造三个对象。
 */
+
 /*
 创建线程：
     std::thread接收一个可调用对象，来创建线程。可调用对象包括：函数、类对象（重载“()”运算符）和lambda。
 */
+
 void thread1() {
     std::this_thread::sleep_for(std::chrono::seconds(2));
     std::cout << "hello thread1" << std::endl;
@@ -83,14 +85,34 @@ void test_forward() {
     TestForward(std::forward<int>(x));
 }
 
+#include "empty_class.h"
+
+void test_empty_class_size() {
+    std::cout << "empty class size: " << sizeof(EmptyClass) << std::endl;
+}
+
+#include "offsetof.h"
+
+void test_offsetof() {
+    printf("%d\n", offsetof(Node, a));
+    printf("%d\n", offsetof(Node, b));
+    printf("%d\n", offsetof(Node, c));
+    printf("%d\n", offsetof(Node, d));
+}
+
 int main(int argc, char const *argv[]) {
     std::cout << "input any key ...." << std::endl;
 
-    // test_thread_pool();
+//    test_thread_pool();
 //    test_rv(110);
 //    test_moveable();
 
 //    test_forward();
+
+//    test_empty_class_size();
+
+    test_offsetof();
+
     std::cin.get();
     return 0;
 }
