@@ -113,6 +113,9 @@ int main(int argc, char const *argv[]) {
 
     test_offsetof();
 
+    Student *stu = new Student;
+    delete stu;
+
     std::cin.get();
     return 0;
 }

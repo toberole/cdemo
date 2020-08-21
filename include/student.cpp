@@ -11,5 +11,5 @@ void Student::sysHello() {
 }
 
 Student::~Student() {
-    std::cout << "Student 2 ......" << std::endl;
+    std::cout << "~Student ......" << std::endl;
 }

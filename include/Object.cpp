@@ -2,9 +2,9 @@
 #include <iostream>
 
 Object::Object() {
-    std::cout << "Object 1 ......" << std::endl;
+    std::cout << "Object() ......" << std::endl;
 }
 
 Object::~Object() {
-    std::cout << "Object 2 ......" << std::endl;
+    std::cout << "~Object() ......" << std::endl;
 }
