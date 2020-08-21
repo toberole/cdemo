@@ -1,24 +1,20 @@
 #include <iostream>
+
 using namespace std;
 
-class Moveable
-{
+class Moveable {
 public:
-    Moveable() : i(new int(3))
-    {
+    Moveable() : i(new int(3)) {
     }
 
-    ~Moveable()
-    {
+    ~Moveable() {
         delete i;
     }
 
-    Moveable(const Moveable &m) : i(new int(*m.i))
-    {
+    Moveable(const Moveable &m) : i(new int(*m.i)) {
     }
 
-    Moveable(Moveable &&m) : i(m.i)
-    {
+    Moveable(Moveable &&m) : i(m.i) {
         std::cout << "hello move ......" << std::endl;
         m.i = nullptr;
     }
@@ -26,10 +22,9 @@ public:
     int *i;
 };
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]) {
     Moveable a;
     Moveable c(std::move(a)); // 会调用移动构造函数
-    cout << *a.i << endl;     // 运行时错误
+    cout << "********** " << *a.i << endl;     // 运行时错误
     return 0;
 }

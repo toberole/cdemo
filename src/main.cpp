@@ -2,6 +2,8 @@
 #include <iostream>
 #include "student.h"
 #include "thread_pool.hpp"
+#include "Moveable1.h"
+#include "test_forward.h"
 /*
     1、若传递int这种简单的类型，建议都是值传递，不要使用引用
     2、如果传递类对象，避免隐式类型转换，应该全部在创建线程时，构造出临时对象，然后在函数参数中用引用来接收，否则系统还会构建临时对象，浪费，即构造三个对象。
@@ -68,12 +70,27 @@ void test_rv(int &&i) {
     std::cout << i << std::endl;
 }
 
+void test_moveable() {
+    Moveable1 a;
+    Moveable1 c(std::move(a)); // 会调用移动构造函数
+    std::cout << "********** " << *a.i << std::endl;     // 运行时错误
+}
+
+void test_forward() {
+    TestForward(1);
+    int x = 1;
+    // TestForward(x); //使print(std::forward<T>(v));编译错误
+    TestForward(std::forward<int>(x));
+}
+
 int main(int argc, char const *argv[]) {
     std::cout << "input any key ...." << std::endl;
 
     // test_thread_pool();
-    test_rv(110);
+//    test_rv(110);
+//    test_moveable();
 
+//    test_forward();
     std::cin.get();
     return 0;
 }

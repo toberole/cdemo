@@ -22,6 +22,10 @@ std::move并不能移动任何东西，它唯一的功能：将一个左值强�
 从实现上讲，std::move基本等同于一个类型转换：
 static_cast<T&&>(lvalue);
 
+std::move无条件转换到右值。就其本身而言，它没有move任何东西。
+std::forward只有在它的参数绑定到一个右值上的时候，它才转换它的参数到一个右值。
+std::move和std::forward在运行期都没有做任何事情
+
 
 
 
