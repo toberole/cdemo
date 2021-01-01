@@ -191,6 +191,8 @@ int main(int argc, char const *argv[])
     std::cout << "input any key ...." << std::endl;
 
     testx_1();
+    std::string s = "";
+    std::cout << s.size() << std::endl;
     // test_variant();
     // test_optional();
     //    test_thread_pool();
