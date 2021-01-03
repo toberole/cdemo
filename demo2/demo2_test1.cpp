@@ -40,7 +40,7 @@ void demo2_test1_1()
 
 void demo2_test1_2()
 {
-    Demo2
+    
 }
 
 int main(int argc, char const *argv[])
