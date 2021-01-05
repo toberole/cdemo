@@ -1,6 +1,9 @@
 #include <iostream>
 #include <map>
-#include "Demo2.h>
+#include "Demo2.h"
+#include <string>
+#include <variant>
+#include <dlfcn.h>
 
 void demo2_test1_1()
 {
@@ -40,11 +43,42 @@ void demo2_test1_1()
 
 void demo2_test1_2()
 {
-    
+    std::string s = "";
+    std::cout << s.empty() << std::endl;
+    std::cout << "s size: " << s.size() << std::endl;
+    auto *temp = static_cast<char *>(malloc(sizeof(char) * s.size()));
+    if (!temp)
+    {
+        std::cout << "malloc size: " << s.size() << std::endl;
+    }
+}
+
+void demo2_test1_3()
+{
+    std::variant<std::monostate, int, double> v1 = {}; // 构造空variant
+    std::cout << "index: " << v1.index() << std::endl;
+}
+
+void demo2_test1_4()
+{
+    void *handle = dlopen("/Users/apple/code/cpp_code/cdemo/demo2/libdemo5.dylib", RTLD_LAZY);
+    if (!handle)
+    {
+        std::cout << "dlopen error: " << dlerror() << std::endl;
+    }
+    int (*p)(int, int);
+    p = (int (*)(int, int))dlsym(handle, "demo5_test1");
+    if (!p)
+    {
+        std::cout << "dlsym error: " << dlerror() << std::endl;
+    }
+
+    int i = p(1,2);
+    std::cout << "p add: " << i << std::endl;
 }
 
 int main(int argc, char const *argv[])
 {
-    demo2_test1_2();
+    demo2_test1_4();
     return 0;
 }
