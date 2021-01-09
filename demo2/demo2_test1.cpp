@@ -4,6 +4,9 @@
 #include <string>
 #include <variant>
 #include <dlfcn.h>
+#include "Stu.h"
+
+stu stu_;
 
 void demo2_test1_1()
 {
