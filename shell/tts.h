@@ -1,1 +1,1 @@
-void test_$tts();
+void test_tts();

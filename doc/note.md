@@ -1,3 +1,9 @@
+所使用的命令为ar
+1 将所有的.a库解压成.o文件
+ar x xx.a
+2 将所有的.o 文件合并成.a
+ar rcs xx.b *.o
+
 g++ -std=c++11 或 g++ -std=gnu++11
 
 inline 函数的定义最好是放在头文件中

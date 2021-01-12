@@ -1,3 +1,3 @@
 #pragma once
 
-void test_${placeholder}();
+void test_{placeholder}();
