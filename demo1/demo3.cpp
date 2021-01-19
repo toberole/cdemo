@@ -1,11 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "MemTrack.h"
-
 class demo3
 {
-private:
+public:
     int i;
 
 public:
@@ -23,6 +21,26 @@ demo3::~demo3()
 {
     printf("~demo3() i = %d ......\n", i);
 }
+
+class MT
+{
+public:
+    MT(char const *filename, int lineNum);
+};
+
+MT::MT(char const *filename, int lineNum)
+{
+    printf("MT filename: %s,lineNum: %d\n", filename, lineNum);
+}
+
+template <class T>
+inline T *operator*(const MT &mt, T *p)
+{
+    return p;
+}
+
+#define MT_NEW MT(__FILE__, __LINE__) * new
+#define MT_DELETE printf("deletefile: %s,line: %d",__FILE__, __LINE__);delete
 
 void *my_malloc(unsigned int size, const char *file, int line)
 {
@@ -44,10 +62,8 @@ int main(int argc, char const *argv[])
     void *p = malloc(100);
     free(p);
 
-    demo3 *demo3_p = new demo3(110);
-    MemTrack::TrackDumpBlocks();
-	MemTrack::TrackListMemoryUsage();
-    delete demo3_p;
-
+    demo3 *demo3_p = MT_NEW demo3(100);
+    printf("demo3_p i: %i\n", demo3_p->i);
+    MT_DELETE demo3_p;
     return 0;
 }
